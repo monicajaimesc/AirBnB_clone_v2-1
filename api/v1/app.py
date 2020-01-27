@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-this file will star
+this file will star an API
 """
 from flask import Blueprint
 
@@ -10,10 +10,16 @@ from flask import Flask
 
 
 app = Flask(__name__)
+app.register_blueprint(app_views)
 
 
+@app.teardown_appcontext
+def close_connection(exception):
+    """
+    close the database
+    """
+    storage.close()
 
-register the blueprint app_views to your Flask instance app
-declare a method to handle @app.teardown_appcontext that calls storage.close()
-inside if __name__ == "__main__":, run your Flask server (variable app) with:
 
+if __name__ == '__main__':
+   app.run(host="0.0.0.0", port=5000, threaded=True)
