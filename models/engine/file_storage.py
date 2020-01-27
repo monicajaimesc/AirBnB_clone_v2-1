@@ -67,4 +67,22 @@ class FileStorage:
 
     def close(self):
         """call reload() method for deserializing the JSON file to objects"""
-        self.reload()
+        self.reload(
+
+def get(self, cls, id):
+        """
+        function
+
+        :param cls:
+        :param id:
+        :return:
+        """
+        pass
+
+    def count(self, cls=None):
+        """
+
+        :param cls:
+        :return:
+        """
+        pass)
