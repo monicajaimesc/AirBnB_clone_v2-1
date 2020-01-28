@@ -8,11 +8,14 @@ from flask import jsonify
 from models import storage
 from api.v1.views import app_views
 from flask import Flask
+from flask_cors import CORS
 
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
 
+# Set CORS
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.errorhandler(404)
 def not_found(err):
