@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-
+this file has the endpoint route
 """
 
 from api.v1.views import app_views
