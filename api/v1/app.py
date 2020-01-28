@@ -3,14 +3,28 @@
 this file will star an API
 """
 from flask import Blueprint
+from flask import jsonify
 
 from models import storage
 from api.v1.views import app_views
 from flask import Flask
+from flask_cors import CORS
 
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
+
+# Set CORS
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+
+@app.errorhandler(404)
+def not_found(err):
+    """
+    Handles 404 error
+    """
+    context = {'error': str(err)}
+    return jsonify(**context)
 
 
 @app.teardown_appcontext
