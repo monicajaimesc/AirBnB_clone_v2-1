@@ -1,5 +1,0 @@
-from api.v1.index import app_views
-
-@app_views.route('api/v1/status')
-def status_json():
-    return "{'status': 'OK'}"
