@@ -39,8 +39,4 @@ def endpoint_number_objects():
     obj_return = {}
     for cls in classes:
         obj_return[object_classes[cls]] = storage.count(cls)
-        print(obj_return)
     return jsonify(obj_return)
-
-
-
