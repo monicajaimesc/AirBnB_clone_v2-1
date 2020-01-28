@@ -17,12 +17,13 @@ app.register_blueprint(app_views)
 # Set CORS
 CORS(app, resources={r"/*": {"origins": "*"}})
 
+
 @app.errorhandler(404)
 def not_found(err):
     """
     Handles 404 error
     """
-    context = {'error': 'Not found'}
+    context = {'error': str(err)}
     return jsonify(**context)
 
 
