@@ -59,16 +59,16 @@ def view_state_id(state_id=None):
         if state:
             return jsonify(state.to_dict())
         else:
-            abort(404)
+            abort(404, 'Not found')
 
     elif request.method == 'PUT':
-        target = storage.get('State', state_id)
-        if target is None:
-            abort(404)
-
         changes = request.get_json()
         if changes is None:
             abort(400, 'Not a JSON')
+
+        target = storage.get('State', state_id)
+        if target is None:
+            abort(404, 'Not found')
 
         ignores = ('id', 'created_at', 'updated_at')
 
