@@ -87,7 +87,7 @@ class DBStorage:
 
     def count(self, cls=None):
         """
-        Count the number of ocurrences from DB
+        Count the number of ocurrences from DB storage
         """
         if cls is None:
             data = self.all()
