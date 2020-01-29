@@ -6,6 +6,7 @@ from api.v1.views import app_views
 from models import storage
 from models.state import State
 from flask import jsonify, abort, request, make_response
+from werkzeug.exceptions import BadRequest
 
 
 @app_views.route('/states', methods=['GET', 'POST'], strict_slashes=False)
@@ -62,8 +63,13 @@ def view_state_id(state_id=None):
             abort(404, 'Not found')
 
     elif request.method == 'PUT':
-        changes = request.get_json()
-        if changes is None:
+        changes = dict()
+
+        try:
+            changes = request.get_json()
+            if changes is None:
+                abort(400, 'Not a JSON')
+        except BadRequest:
             abort(400, 'Not a JSON')
 
         target = storage.get('State', state_id)
