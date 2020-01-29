@@ -49,5 +49,25 @@ def view_state_id(state_id=None):
         abort(404)
 
 
+@app_views.route('/states/<state_id>', methods=['DELETE'],
+                 strict_slashes=False)
+def delete_state(state_id=None):
+    """
+
+    """
+    state = storage.get('State', state_id)
+    if state_id and state is None:
+        abort(404)
+    storage.delete(state)
+    return jsonify({})
+
+
+
+
+
+
+
+
+
 
 
