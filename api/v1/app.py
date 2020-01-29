@@ -22,7 +22,7 @@ def not_found(err):
     """
     Handles 404 error
     """
-    context = {'error': str(err)}
+    context = {'error': 'Not found'}
     return jsonify(**context)
 
 
