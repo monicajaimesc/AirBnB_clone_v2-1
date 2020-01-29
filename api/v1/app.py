@@ -3,7 +3,7 @@
 this file will star an API
 """
 
-from flask import jsonify
+from flask import jsonify, make_response
 from models import storage
 from api.v1.views import app_views
 from flask import Flask
@@ -23,7 +23,7 @@ def not_found(err):
     Handles 404 error
     """
     context = {'error': 'Not found'}
-    return jsonify(**context)
+    return make_response(jsonify(**context), 404)
 
 
 @app.teardown_appcontext
