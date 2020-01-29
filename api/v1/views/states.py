@@ -63,8 +63,13 @@ def view_state_id(state_id=None):
             abort(404, 'Not found')
 
     elif request.method == 'PUT':
-        changes = request.get_json()
-        if changes is None:
+        changes = dict()
+
+        try:
+            changes = request.get_json()
+            if changes is None:
+                abort(400, 'Not a JSON')
+        except BadRequest:
             abort(400, 'Not a JSON')
 
         target = storage.get('State', state_id)
