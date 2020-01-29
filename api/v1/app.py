@@ -2,7 +2,6 @@
 """
 this file will star an API
 """
-
 from flask import jsonify, make_response
 from models import storage
 from api.v1.views import app_views
