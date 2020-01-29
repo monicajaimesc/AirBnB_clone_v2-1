@@ -94,5 +94,6 @@ def view_state_id(state_id=None):
         if state_id is None:
             abort(404, 'Not found')
         storage.delete(state)
+        storage.save()
         return jsonify({}), 200
 
