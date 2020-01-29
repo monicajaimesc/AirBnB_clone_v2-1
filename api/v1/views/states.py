@@ -88,5 +88,9 @@ def view_state_id(state_id=None):
         return make_response(jsonify(**target.to_dict()), 200)
 
     elif request.method == 'DELETE':
-        # TODO: Needs implementation
-        pass
+        state = storage.get("State", state_id)
+        if state and state_id is None:
+            abort(404, 'Not found')
+        storage.delete(state)
+        return jsonify({})
+
