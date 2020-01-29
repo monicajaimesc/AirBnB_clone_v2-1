@@ -16,14 +16,21 @@ app.register_blueprint(app_views)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 
+def send_json_error(err, code):
+    """
+    Sends an error using JSON
+    """
+    msg = str(err).split(': ')[1]
+    context = {'error': msg}
+    return make_response(jsonify(**context), code)
+
+
 @app.errorhandler(400)
 def bad_request(err):
     """
     Handles 400 error
     """
-    msg = str(err).split(': ')[1]
-    context = {'error': msg}
-    return make_response(jsonify(**context), 400)
+    return send_json_error(err, 400)
 
 
 @app.errorhandler(404)
@@ -31,9 +38,7 @@ def not_found(err):
     """
     Handles 404 error
     """
-    msg = str(err).split(': ')[1]
-    context = {'error': msg}
-    return make_response(jsonify(**context), 404)
+    return send_json_error(err, 404)
 
 
 @app.teardown_appcontext
