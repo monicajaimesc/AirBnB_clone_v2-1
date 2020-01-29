@@ -2,12 +2,13 @@
 """
 this file will star an API
 """
-from flask import Blueprint
+
 from flask import jsonify
 from models import storage
 from api.v1.views import app_views
 from flask import Flask
 from flask_cors import CORS
+from os import getenv
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
