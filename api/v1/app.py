@@ -4,18 +4,16 @@ this file will star an API
 """
 from flask import Blueprint
 from flask import jsonify
-
 from models import storage
 from api.v1.views import app_views
 from flask import Flask
-#from flask_cors import CORS
-
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
 
 # Set CORS
-#CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 @app.errorhandler(404)
@@ -36,4 +34,6 @@ def close_connection(exception):
 
 
 if __name__ == '__main__':
-   app.run(host="0.0.0.0", port=5000, threaded=True)
+    host = getenv("HBNB_API_HOST")
+    port = getenv("HBNB_API_PORT")
+    app.run(host=host, port=port, threaded=True)
