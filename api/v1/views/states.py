@@ -4,10 +4,11 @@ State objects that will handles all default RestFul API actions
 """
 from api.v1.views import app_views
 from models import storage
-from flask import jsonify,abort, request
+from models.state import State
+from flask import jsonify, abort, request, make_response
 
 
-@app_views.route('/states', methods=['GET'], strict_slashes=False)
+@app_views.route('/states', methods=['GET', 'POST'], strict_slashes=False)
 def view_states():
     """
    Resfult model (enpoints) that returns a list of states as arrays
@@ -25,14 +26,25 @@ def view_states():
     returns:
 
    """
-    states_ = storage.all('State')
-    state_return = []
-    for state in states_.values():
-        state_return.append(state.to_dict())
-    return jsonify(state_return)
+    if request.method == 'GET':
+        states_ = storage.all('State')
+        state_return = []
+        for state in states_.values():
+            state_return.append(state.to_dict())
+        return jsonify(state_return)
+
+    elif request.method == 'POST':
+        data = request.get_json()
+        if data is None:
+            abort(400, 'Not a JSON')
+        if data.get('name') is None:
+            abort(400, 'Missing name')
+        new_state = State(**data)
+        new_state.save()
+        return make_response(jsonify(**new_state.to_dict()), 201)
 
 
-@app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('/states/<state_id>', methods=['GET', 'PUT', 'DELETE'], strict_slashes=False)
 def view_state_id(state_id=None):
     """
     shows an state for its id
@@ -43,11 +55,32 @@ def view_state_id(state_id=None):
 
     """
     state = storage.get('State', state_id)
-    if state:
-        return jsonify(state.to__dict())
-    else:
-        abort(404)
+    if request.method == 'GET':
+        if state:
+            return jsonify(state.to_dict())
+        else:
+            abort(404)
 
+    elif request.method == 'PUT':
+        target = storage.get('State', state_id)
+        if target is None:
+            abort(404)
 
+        changes = request.get_json()
+        if changes is None:
+            abort(400, 'Not a JSON')
 
+        ignores = ('id', 'created_at', 'updated_at')
 
+        for key, val in changes.items():
+            if key in ignores:
+                pass
+            else:
+                setattr(target, key, val)
+
+        target.save()
+        return make_response(jsonify(**target.to_dict()), 200)
+
+    elif request.method == 'DELETE':
+        # TODO: Needs implementation
+        pass
