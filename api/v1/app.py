@@ -38,7 +38,8 @@ def not_found(err):
     """
     Handles 404 error
     """
-    return send_json_error(err, 404)
+    print(err)
+    return send_json_error("error: Not found", 404)
 
 
 @app.teardown_appcontext
