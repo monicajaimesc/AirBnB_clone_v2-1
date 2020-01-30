@@ -21,6 +21,7 @@ def places_by_city(city_id):
         for place in places_.values():
             place_return.append(place.to_dict())
         return jsonify(place_return)
+
     elif request.method == 'POST':
         data = request.get_json()
         if data is None:
@@ -72,8 +73,8 @@ def places(place_id):
     elif request.method == 'DELETE':
         if place is None:
             abort(404, 'Not found')
-        place = storage.get("Place", place_ids)
-        if place_ids is None:
+        place = storage.get("Place", place_id)
+        if place_id is None:
             abort(404, 'Not found')
         storage.delete(place)
         storage.save()
