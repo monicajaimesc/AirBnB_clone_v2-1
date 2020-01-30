@@ -38,6 +38,8 @@ def places_by_city(city_id):
             abort(400, 'Missing name')
 
         new_place = Place(**data)
+        new_place.city_id = city.id
+        new_place.user_id = user.id
         new_place.save()
         return make_response(jsonify(**new_place.to_dict()), 201)
 
