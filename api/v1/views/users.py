@@ -22,7 +22,7 @@ def users():
         return jsonify(user_return)
     elif request.method == 'POST':
         data = request.get_json()
-        if data is None:
+        if data is None or not data:
             abort(400, 'Not a JSON')
         if data.get('email') is None:
             abort(400, 'Missing email')
