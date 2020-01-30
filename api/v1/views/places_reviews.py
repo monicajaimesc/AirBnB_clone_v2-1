@@ -9,7 +9,8 @@ from flask import jsonify, abort, request, make_response
 from werkzeug.exceptions import BadRequest
 
 
-@app_views.route('/places/<place_id>/reviews', methods=['GET', 'POST'], strict_slashes=False)
+@app_views.route('/places/<place_id>/reviews', methods=['GET', 'POST'],
+                 strict_slashes=False)
 def reviews_by_place(place_id):
     """
     Handle reviews by place
@@ -30,7 +31,9 @@ def reviews_by_place(place_id):
         new_review.save()
         return make_response(jsonify(**new_review.to_dict()), 201)
 
-@app_views.route('/reviews/<review_id>', methods=['GET', 'PUT', 'DELETE'], strict_slashes=False)
+
+@app_views.route('/reviews/<review_id>', methods=['GET', 'PUT', 'DELETE'],
+                 strict_slashes=False)
 def reviews(review_id):
     """
     Handle reviews by id
@@ -43,7 +46,7 @@ def reviews(review_id):
             abort(404, 'Not found')
     elif request.method == 'PUT':
         changes = dict()
-        
+
         try:
             changes = request.get_json()
             if changes is None:

@@ -32,7 +32,8 @@ def amenities():
         return make_response(jsonify(**new_amenity.to_dict()), 201)
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['GET', 'PUT', 'DELETE'], strict_slashes=False)
+@app_views.route('/amenities/<amenity_id>', methods=['GET', 'PUT', 'DELETE'],
+                 strict_slashes=False)
 def amenities_by_id(amenity_id):
     """
     Handle amenity by id

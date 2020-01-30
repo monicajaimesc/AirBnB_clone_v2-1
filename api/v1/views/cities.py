@@ -9,7 +9,8 @@ from flask import jsonify, abort, request, make_response
 from werkzeug.exceptions import BadRequest
 
 
-@app_views.route('/states/<state_id>/cities', methods=['GET', 'POST'], strict_slashes=False)
+@app_views.route('/states/<state_id>/cities', methods=['GET', 'POST'],
+                 strict_slashes=False)
 def cities_by_state(state_id):
     """
     Handle cities by state
@@ -37,7 +38,8 @@ def cities_by_state(state_id):
             abort(400, 'Not a JSON')
 
 
-@app_views.route('/cities/<city_id>', methods=['GET', 'PUT', 'DELETE'], strict_slashes=False)
+@app_views.route('/cities/<city_id>', methods=['GET', 'PUT', 'DELETE'],
+                 strict_slashes=False)
 def cities(city_id):
     """
     Handle cities in general

@@ -33,7 +33,8 @@ def users():
         return make_response(jsonify(**new_user.to_dict()), 201)
 
 
-@app_views.route('/users/<user_id>', methods=['GET', 'PUT', 'DELETE'], strict_slashes=False)
+@app_views.route('/users/<user_id>', methods=['GET', 'PUT', 'DELETE'],
+                 strict_slashes=False)
 def user_by_id(user_id):
     """
     Handle user by id

@@ -9,7 +9,8 @@ from flask import jsonify, abort, request, make_response
 from werkzeug.exceptions import BadRequest
 
 
-@app_views.route('/cities/<city_id>/places', methods=['GET', 'POST'], strict_slashes=False)
+@app_views.route('/cities/<city_id>/places', methods=['GET', 'POST'],
+                 strict_slashes=False)
 def places_by_city(city_id):
     """
     Handle places by city
@@ -29,10 +30,10 @@ def places_by_city(city_id):
         new_places = Place(**data)
         new_places.save()
         return make_response(jsonify(**new_places.to_dict()), 201)
-        
 
 
-@app_views.route('/places/<place_id>', methods=['GET', 'PUT', 'DELETE'], strict_slashes=False)
+@app_views.route('/places/<place_id>', methods=['GET', 'PUT', 'DELETE'],
+                 strict_slashes=False)
 def places(place_id):
     """
     Handle places in general
@@ -52,7 +53,7 @@ def places(place_id):
                 abort(400, 'Not a JSON')
         except BadRequest:
             abort(400, 'Not a JSON')
-            
+
         target = storage.get('Place', place_id)
         if target is None:
             abort(404, 'Not found')
@@ -67,7 +68,7 @@ def places(place_id):
 
         target.save()
         return make_response(jsonify(**target.to_dict()), 200)
-            
+
     elif request.method == 'DELETE':
         if place is None:
             abort(404, 'Not found')
