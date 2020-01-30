@@ -45,7 +45,8 @@ def view_states():
         return make_response(jsonify(**new_state.to_dict()), 201)
 
 
-@app_views.route('/states/<state_id>', methods=['GET', 'PUT', 'DELETE'], strict_slashes=False)
+@app_views.route('/states/<state_id>', methods=['GET', 'PUT', 'DELETE'],
+                 strict_slashes=False)
 def view_state_id(state_id=None):
     """
     shows an state for its id
@@ -96,4 +97,3 @@ def view_state_id(state_id=None):
         storage.delete(state)
         storage.save()
         return jsonify({}), 200
-
