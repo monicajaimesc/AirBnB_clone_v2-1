@@ -55,6 +55,7 @@ def reviews(review_id):
             abort(400, 'Not a JSON')
 
         target = storage.get('Review', review_id)
+
         if target is None:
             abort(404, 'Not found')
 
