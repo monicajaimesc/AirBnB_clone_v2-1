@@ -127,12 +127,8 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(state.id, new_state.id)
         self.assertEqual(state.created_at, new_state.created_at)
         # not class or id
-        # self.assertIsNone(new_state)
         self.assertIsNone(models.storage.get(new_state, new_state.id))
 
-    # def test_not_class(self):
-        # new_state = self.storage.get('State', 'imanid')
-        # self.assertIsNone(models.storage.get(new_state))
 
     def test_count_method(self):
         """
