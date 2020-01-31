@@ -101,6 +101,15 @@ class TestFileStorage(unittest.TestCase):
         # not class or id
         self.assertIsNone(models.storage.get(new_state, new_state.id))
 
+    def test_get_cls(self):
+        """
+        test that will show the creation of a stated and will show it
+        """
+        state_ = State(name="unicornstate", id="magic")
+        state_.save()
+        self.assertEqual(models.storage.get("State", state_.id), state_)
+
+
     def test_count_method(self):
         """
         test of the function count that returns the number

@@ -115,7 +115,6 @@ class TestFileStorage(unittest.TestCase):
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
 
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_get_method(self):
         """
         test of the get method (from flask framework) that returns
@@ -129,6 +128,14 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(state.created_at, new_state.created_at)
         # not class or id
         self.assertIsNone(models.storage.get(new_state, new_state.id))
+
+    def test_get_cls(self):
+        """
+        test that will show the creation of a stated and will show it
+        """
+        state_ = State(name="unicornstate", id="magic")
+        state_.save()
+        self.assertEqual(models.storage.get("State", state_.id), state_)
 
     def test_count_method(self):
         """
