@@ -146,9 +146,7 @@ class TestFileStorage(unittest.TestCase):
         number_objects = len(models.storage.all('State'))
         object_ = State(name="Florida")
         object_.save()
-        self.assertEqual(number_objects, models.storage.count('State'), + 1)
-
-
+        self.assertEqual(number_objects + 1, models.storage.count('State'))
 
 
 if __name__ == "__main__":
