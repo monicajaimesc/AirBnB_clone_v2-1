@@ -115,6 +115,7 @@ class TestFileStorage(unittest.TestCase):
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
 
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_get_method(self):
         """
         test of the get method (from flask framework) that returns
@@ -140,10 +141,13 @@ class TestFileStorage(unittest.TestCase):
     def test_count_cls(self):
         """
         test of the function count that returns the number of
-        objects in a class
+        objects in a class + 1, testing counting..
         """
         number_objects = len(models.storage.all('State'))
-        self.assertEqual(number_objects, models.storage.count('State'))
+        object_ = State(name="Florida")
+        object_.save()
+        self.assertEqual(number_objects, models.storage.count('State'), + 1)
+
 
 
 
