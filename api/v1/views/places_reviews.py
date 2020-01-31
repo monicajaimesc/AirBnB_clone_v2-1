@@ -15,19 +15,31 @@ def reviews_by_place(place_id):
     """
     Handle reviews by place
     """
+    place = storage.get('Place', place_id)
+    if place is None:
+        abort(404, 'Not found')
+
     if request.method == 'GET':
-        review_ = storage.all('Review')
-        review_return = []
-        for review in review_.values():
-            review_return.append(review.to_dict())
-        return jsonify(review_return)
+        reviews_list = [x.to_dict() for x in place.reviews]
+        return make_response(jsonify(reviews_list), 200)
+
     elif request.method == 'POST':
         data = request.get_json()
         if data is None:
             abort(400, 'Not a JSON')
-        if data.get('name') is None:
-            abort(400, 'Missing name')
+        if data.get('user_id') is None:
+            abort(400, 'Missing user_id')
+
+        user = storage.get('User', data.get('user_id'))
+        if user is None:
+            abort(404, 'Not found')
+
+        if data.get('text') is None:
+            abort(400, 'Missing text')
+
         new_review = Review(**data)
+        new_review.place_id = place.id
+        new_review.user_id = user.id
         new_review.save()
         return make_response(jsonify(**new_review.to_dict()), 201)
 
@@ -39,11 +51,12 @@ def reviews(review_id):
     Handle reviews by id
     """
     review = storage.get('Review', review_id)
+    if review is None:
+        abort(404, 'Not found')
+
     if request.method == 'GET':
-        if review:
-            return jsonify(review.to_dict())
-        else:
-            abort(404, 'Not found')
+        return make_response(jsonify(review.to_dict()), 200)
+
     elif request.method == 'PUT':
         changes = dict()
 
@@ -54,28 +67,18 @@ def reviews(review_id):
         except BadRequest:
             abort(400, 'Not a JSON')
 
-        target = storage.get('Review', review_id)
-
-        if target is None:
-            abort(404, 'Not found')
-
-        ignores = ('id', 'created_at', 'updated_at')
+        ignores = ('id', 'user_id', 'place_id', 'created_at', 'updated_at')
 
         for key, val in changes.items():
             if key in ignores:
                 pass
             else:
-                setattr(target, key, val)
+                setattr(review, key, val)
 
-        target.save()
-        return make_response(jsonify(**target.to_dict()), 200)
+        review.save()
+        return make_response(jsonify(**review.to_dict()), 200)
 
     elif request.method == 'DELETE':
-        if review is None:
-            abort(404, 'Not found')
-        review = storage.get("Review", review_id)
-        if review_id is None:
-            abort(404, 'Not found')
         storage.delete(review)
         storage.save()
         return jsonify({}), 200
