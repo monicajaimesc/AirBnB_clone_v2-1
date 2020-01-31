@@ -20,9 +20,10 @@ def users():
         for value in user_list.values():
             user_return.append(value.to_dict())
         return jsonify(user_return)
+
     elif request.method == 'POST':
         data = request.get_json()
-        if data is None:
+        if data is None or not data:
             abort(400, 'Not a JSON')
         if data.get('email') is None:
             abort(400, 'Missing email')
@@ -39,7 +40,7 @@ def user_by_id(user_id):
     """
     Handle user by id
     """
-    user = storage.get('Amenity', user_id)
+    user = storage.get('User', user_id)
     if user is None:
         abort(404, 'Not found')
 

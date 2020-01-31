@@ -15,22 +15,33 @@ def places_by_city(city_id):
     """
     Handle places by city
     """
+    city = storage.get('City', city_id)
+    if city is None:
+        abort(404, 'Not found')
+
     if request.method == 'GET':
-        places_ = storage.all('Place')
-        place_return = []
-        for place in places_.values():
-            place_return.append(place.to_dict())
-        return jsonify(place_return)
+        places_list = [x.to_dict() for x in city.places]
+        return make_response(jsonify(places_list), 200)
 
     elif request.method == 'POST':
         data = request.get_json()
         if data is None:
             abort(400, 'Not a JSON')
+        if data.get('user_id') is None:
+            abort(400, 'Missing user_id')
+
+        user = storage.get('User', data.get('user_id'))
+        if user is None:
+            abort(404, 'Not found')
+
         if data.get('name') is None:
             abort(400, 'Missing name')
-        new_places = Place(**data)
-        new_places.save()
-        return make_response(jsonify(**new_places.to_dict()), 201)
+
+        new_place = Place(**data)
+        new_place.city_id = city.id
+        new_place.user_id = user.id
+        new_place.save()
+        return make_response(jsonify(**new_place.to_dict()), 201)
 
 
 @app_views.route('/places/<place_id>', methods=['GET', 'PUT', 'DELETE'],
@@ -40,11 +51,12 @@ def places(place_id):
     Handle places in general
     """
     place = storage.get('Place', place_id)
+    if place is None:
+        abort(404, 'Not found')
+
     if request.method == 'GET':
-        if place:
-            return jsonify(place.to_dict())
-        else:
-            abort(404, 'Not found')
+        return make_response(jsonify(place.to_dict()), 200)
+
     elif request.method == 'PUT':
         changes = dict()
 
@@ -55,27 +67,18 @@ def places(place_id):
         except BadRequest:
             abort(400, 'Not a JSON')
 
-        target = storage.get('Place', place_id)
-        if target is None:
-            abort(404, 'Not found')
-
-        ignores = ('id', 'created_at', 'updated_at')
+        ignores = ('id', 'user_id', 'city_id', 'created_at', 'updated_at')
 
         for key, val in changes.items():
             if key in ignores:
                 pass
             else:
-                setattr(target, key, val)
+                setattr(place, key, val)
 
-        target.save()
-        return make_response(jsonify(**target.to_dict()), 200)
+        place.save()
+        return make_response(jsonify(**place.to_dict()), 200)
 
     elif request.method == 'DELETE':
-        if place is None:
-            abort(404, 'Not found')
-        place = storage.get("Place", place_id)
-        if place_id is None:
-            abort(404, 'Not found')
         storage.delete(place)
         storage.save()
-        return jsonify({}), 200
+        return make_response(jsonify({}), 200)
