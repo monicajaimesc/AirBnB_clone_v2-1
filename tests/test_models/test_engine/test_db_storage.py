@@ -109,6 +109,14 @@ class TestFileStorage(unittest.TestCase):
         number_objects = len(models.storage.all())
         self.assertEqual(number_objects, models.storage.count())
 
+    def test_count_cls(self):
+        """
+        test of the function count that returns the number of
+        objects in a class
+        """
+        number_objects = len(models.storage.all('State'))
+        self.assertEqual(number_objects, models.storage.count('State'))
+
 
 if __name__ == "__main__":
     unittest.main()
